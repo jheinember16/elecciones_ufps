@@ -16,6 +16,7 @@ public class CandidatoDao {
 	private static final String ELIMINAR = "DELETE FROM CANDIDATO WHERE ID = ?;";
 	private static final String ACTUALIZAR = "UPDATE CANDIDATO SET DOCUMENTO = ?, NOMBRE = ? APELLIDO ID = ? ELECCION ID = ? NUMERO ID = ? WHERE ID = ?;";
 	private static final String LISTAR = "SELECT C.*, E.NOMBRE FROM CANDIDATO C INNER JOIN ELECCION E ON C.ELECCION = E.ID;";
+	private static final String GET_BY_ID = "SELECT * FROM CANDIDATO C WHERE C.ID = ?;";
 	
 	public CandidatoDao() {
 		this.conexion = Conexion.getConexion();
@@ -85,8 +86,32 @@ public class CandidatoDao {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
-			System.out.println("OK");
+			System.out.println("Operación exitosa");
 		}
 		return candidatos;
+	}
+	
+	public Candidato porId (int id) {
+		Candidato candidato = null;
+		try {
+			PreparedStatement ps = conexion.setPreparedStatement(GET_BY_ID);
+			ps.setInt(1, id);
+			
+			ResultSet rs = conexion.query();
+			while (rs.next()) {
+				int idBD = rs.getInt("id");
+				String nombre = rs.getString("nombre");
+				String apellido = rs.getString("apellido");
+				String documento = rs.getString("documento");
+				int eleccion = rs.getInt("eleccion");
+				int numero = rs.getInt("numero");
+				candidato = new Candidato(idBD, documento, nombre, apellido, eleccion, numero);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			System.out.println("Registro encontrado");
+		}
+		return candidato;
 	}
 }
