@@ -79,7 +79,7 @@ public class CandidatoServlet extends HttpServlet {
 				break;
 			}
 		} catch (SQLException e) {
-			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
@@ -153,7 +153,6 @@ public class CandidatoServlet extends HttpServlet {
 		Eleccion eleccion = new Eleccion(null, nombre, fechainicio, fechafin, cargo);
 		eleccionDao.registrar(eleccion);
 		response.sendRedirect("list");
-
 	}
 
 	private void listarCandidatos(HttpServletRequest request, HttpServletResponse response)
@@ -162,7 +161,6 @@ public class CandidatoServlet extends HttpServlet {
 		request.setAttribute("listaCandidatos", candidatos);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("listaCandidatos.jsp");
 		dispatcher.forward(request, response);
-
 	}
 
 	/**
